@@ -1,0 +1,27 @@
+package com.ecommerce.server.infrastructure.persistence.exceptions;
+
+import com.ecommerce.server.interfaces.models.result.ApiResult;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@Builder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+public class BaseException extends RuntimeException {
+    private String requestId;
+    private String requestDateTime;
+    private String channel;
+    private ApiResult result;
+
+    public BaseException(String requestId, String requestDateTime, String channel, ApiResult result) {
+        this.requestId = requestId;
+        this.requestDateTime = requestDateTime;
+        this.channel = channel;
+        this.result = result;
+    }
+
+    public BaseException(ApiResult result) {
+        this.result = result;
+    }
+}
