@@ -3,8 +3,6 @@ package com.ecommerce.server.specification;
 import com.ecommerce.server.entities.Product;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.UUID;
-
 /**
  * @author Bao Pham
  * @created 02/04/2025

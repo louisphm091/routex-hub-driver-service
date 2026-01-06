@@ -1,7 +1,6 @@
 package com.ecommerce.server.exceptions;
 
 import com.ecommerce.server.dto.result.ApiResult;
-import com.smart.pay.transaction.service.interfaces.model.ApiResult;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
