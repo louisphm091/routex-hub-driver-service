@@ -1,0 +1,25 @@
+package com.ecommerce.server.auth.helper;
+
+import java.util.Random;
+
+/**
+ * @author Bao Pham
+ * @created 07/04/2025
+ * @project e-commerce application
+ **/
+
+
+
+public class VerificationCodeGenerator {
+    public static String generateCode() {
+        Random random = new Random();
+
+        int code = 10000 + random.nextInt(900000);
+        return String.valueOf(code);
+
+
+
+    }
+
+
+}
