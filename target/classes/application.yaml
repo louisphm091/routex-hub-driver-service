@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: lv-shop-server
+
+  # server:
+  #   servlet:
+  #     context-path: /api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/LV-shop
+    username: odoo
+    password: odoo
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hold.missyoull@gmail.com
+    password: eenl pjmy tspf rivk
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 968667863356-0u0j5higt505clc04bd7kakhbqebp63r.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - profile
+              - email
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            authorization-grant-type: authorization_code
+            client-name: Google
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+
+jwt:
+  auth:
+    app: authapp
+    secret_key: Y29vbC1qd3Qtc2VjcmV0LWtleS1wcm9kLWFzLWJhc2U2NA==
+    expires_in: 3600
+
+stripe:
+  secret: sk_test_51RBfto05DxE0eeiExfu6W7UjaBCWlRt7qg8C5CXQ00B1VtoUWLrVHxa94evlyqyGrnIMg22lN4u1hKGVrOvL4f8800hXgDxi32

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TASK_1",
+    "priority": "HIGH",
+    "tags": [],
+    "title": "Refactor to DDD Architecture",
+    "description": "Driven by Domain instead of MVC ",
+    "status": "DONE",
+    "date": {
+      "date": {
+        "year": 2026,
+        "month": 1,
+        "day": 5
+      },
+      "time": {
+        "hour": 17,
+        "minute": 59,
+        "second": 28,
+        "nano": 841210000
+      }
+    },
+    "finishDate": {
+      "date": {
+        "year": 2026,
+        "month": 1,
+        "day": 6
+      },
+      "time": {
+        "hour": 18,
+        "minute": 41,
+        "second": 31,
+        "nano": 246112000
+      }
+    },
+    "isImported": false
+  }
+]
