@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Bao Pham
@@ -39,7 +40,7 @@ public class ProductDetailResponse extends BaseResponse {
         private String categoryId;
         private String thumbnail;
         private String slug;
-        private List<CategoryList> categoryLists;
+        private Set<CategoryList> categoryLists;
         private List<ProductVariantDetail> variants;
         private List<ProductResourceDetail> productResources;
     }

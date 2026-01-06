@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +39,7 @@ public class ProductMapper {
                         .isNewArrival(tx.isNewArrival())
                         .thumbnail(tx.getThumbnail())
                         .slug(tx.getSlug())
-                        .categoryLists(mapCategoryList(tx.getCategoryList()))
+                        .categoryLists(mapCategoryList(tx.getCategories()))
                         .variants(mapVariants(tx.getVariantList()))
                         .productResources(mapResources(tx.getResourcesList()))
                         .build())
@@ -47,7 +48,7 @@ public class ProductMapper {
         return response;
     }
 
-    private List<ProductDetailResponse.CategoryList> mapCategoryList(List<Category> list) {
+    private Set<ProductDetailResponse.CategoryList> mapCategoryList(Set<Category> list) {
         if(list == null) {
             throw new RuntimeException("CategoryList returns null");
         }
@@ -58,7 +59,7 @@ public class ProductMapper {
                         .categoryName(l.getCategoryName())
                         .categoryTypeId(l.getCategoryTypeId())
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private List<ProductDetailResponse.ProductVariantDetail> mapVariants(

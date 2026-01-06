@@ -1,16 +1,14 @@
 package com.ecommerce.server.application.services;
 
+import com.ecommerce.server.domain.product.Product;
 import com.ecommerce.server.infrastructure.persistence.adapter.ProductGateway;
+import com.ecommerce.server.infrastructure.persistence.mapper.ProductMapper;
 import com.ecommerce.server.interfaces.models.product.ProductDetailRequest;
 import com.ecommerce.server.interfaces.models.product.UploadProductResponse;
 import com.ecommerce.server.interfaces.models.request.product.ProductDetailResponse;
 import com.ecommerce.server.interfaces.models.request.product.UploadProductRequest;
-import com.ecommerce.server.domain.product.Product;
-import com.ecommerce.server.infrastructure.persistence.mapper.ProductMapper;
 import com.ecommerce.server.interfaces.records.ProductFilter;
-import com.ecommerce.server.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,7 +65,8 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Product fetchProductById(UUID id) throws Exception {
-        return productRepository.findById(id).orElseThrow(BadRequestException::new);
+//        return productRepository.findById(id).orElseThrow(BadRequestException::new);
+        return null;
     }
 
 
