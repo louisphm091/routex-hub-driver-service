@@ -3,7 +3,7 @@ package com.ecommerce.server.domain.order;
 /**
  * @author Bao Pham
  * @created 08/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 public enum OrderStatus {
     PENDING,

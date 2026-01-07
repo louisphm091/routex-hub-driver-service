@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 
@@ -33,4 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             @Param("categoryId") String categoryId,
             @Param("typeId") String typeId
     );
+
+
+    Product findByProductId(String productId);
 }

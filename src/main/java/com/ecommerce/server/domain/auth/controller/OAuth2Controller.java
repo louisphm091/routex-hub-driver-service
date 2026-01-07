@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * @created 08/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  * @author Bao Pham
  *
 **/

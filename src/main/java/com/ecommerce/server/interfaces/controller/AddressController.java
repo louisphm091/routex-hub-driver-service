@@ -3,6 +3,7 @@ package com.ecommerce.server.interfaces.controller;
 import com.ecommerce.server.interfaces.models.AddressRequest;
 import com.ecommerce.server.domain.customer.Address;
 import com.ecommerce.server.application.services.AddressService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +15,15 @@ import java.util.UUID;
 /**
  * @author Bao Pham
  * @created 08/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 
 @RestController
 @RequestMapping("/api/address")
+@RequiredArgsConstructor
 public class AddressController {
 
-    @Autowired
     private AddressService addressService;
 
     @PostMapping

@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * @author Bao Pham
  * @created 07/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @Repository
