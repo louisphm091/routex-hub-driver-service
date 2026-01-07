@@ -1,4 +1,4 @@
-package com.ecommerce.server.interfaces.models.product;
+package com.ecommerce.server.interfaces.models.product.response;
 
 
 import com.ecommerce.server.interfaces.models.request.base.BaseResponse;

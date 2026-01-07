@@ -7,4 +7,6 @@ public class ApiConstant {
     public static final String CATEGORY_API = "/category";
     public static final String PRODUCT_API = "/products";
     public static final String UPLOAD_PRODUCT = "/upload";
+    public static final String GET_PRODUCT_DETAIL = "/get-detail";
+    public static final String UPDATE_PRODUCT = "/update";
 }

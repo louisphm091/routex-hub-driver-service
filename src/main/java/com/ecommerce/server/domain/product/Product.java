@@ -46,7 +46,6 @@ public class Product extends AbstractAuditingEntity {
     private BigDecimal sellingPrice;
     private BigDecimal originalPrice;
     private String thumbnail;
-    private boolean isVisible;
     private boolean isNewArrival;
     private String slug;
 

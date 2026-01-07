@@ -15,7 +15,7 @@ import java.security.Principal;
 /**
  * @author Bao Pham
  * @created 08/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @RestController

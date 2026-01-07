@@ -1,6 +1,6 @@
 package com.ecommerce.server.infrastructure.persistence.mapper;
 
-import com.ecommerce.server.interfaces.models.request.product.ProductDetailResponse;
+import com.ecommerce.server.interfaces.models.product.response.ProductDetailResponse;
 import com.ecommerce.server.domain.category.Category;
 import com.ecommerce.server.domain.product.Product;
 import com.ecommerce.server.domain.product.ProductVariant;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * @author Bao Pham
  * @created 05/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @Component

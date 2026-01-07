@@ -22,7 +22,7 @@ import static com.ecommerce.server.infrastructure.persistence.constant.Applicati
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
-public class BaseResponse {
+public abstract class BaseResponse<T> {
 
     @NotBlank
     @Pattern(regexp = REQUEST_ID_REGREX, message = "RequestId must be in xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
@@ -36,5 +36,7 @@ public class BaseResponse {
     @Size(max = 30, message = "Channel can't exceed 30 characters")
     @Pattern(regexp = CHANNEL_REGREX, message = "Channel must be ONL, OFF")
     private String channel;
+
+    private T data;
 }
 

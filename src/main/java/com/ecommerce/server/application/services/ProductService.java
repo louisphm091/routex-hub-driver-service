@@ -1,29 +1,25 @@
 package com.ecommerce.server.application.services;
 
-import com.ecommerce.server.interfaces.models.product.ProductDetailRequest;
-import com.ecommerce.server.interfaces.models.product.UploadProductResponse;
-import com.ecommerce.server.interfaces.models.request.product.ProductDetailResponse;
-import com.ecommerce.server.interfaces.models.request.product.UploadProductRequest;
-import com.ecommerce.server.domain.product.Product;
-
-import java.util.UUID;
+import com.ecommerce.server.interfaces.models.product.request.ProductDetailRequest;
+import com.ecommerce.server.interfaces.models.product.request.UpdateProductRequest;
+import com.ecommerce.server.interfaces.models.product.request.UploadProductRequest;
+import com.ecommerce.server.interfaces.models.product.response.ProductDetailResponse;
+import com.ecommerce.server.interfaces.models.product.response.UpdateProductResponse;
+import com.ecommerce.server.interfaces.models.product.response.UploadProductResponse;
 
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
+
 public interface ProductService {
 
-    Product addProduct(ProductDetailResponse product);
     ProductDetailResponse getAllProducts(ProductDetailRequest request);
 
-    ProductDetailResponse getProductBySlug(String slug);
-
-    ProductDetailResponse getProductById(UUID id);
+    ProductDetailResponse getProductById(ProductDetailRequest request);
 
     UploadProductResponse uploadProduct(UploadProductRequest request);
-    Product updateProduct(ProductDetailResponse productDto, UUID id);
 
-    Product fetchProductById(UUID uuid) throws Exception;
+    UpdateProductResponse updateProduct(UpdateProductRequest request);
 }

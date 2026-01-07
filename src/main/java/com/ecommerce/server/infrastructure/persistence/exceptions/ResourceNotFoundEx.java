@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @ResponseStatus(HttpStatus.NOT_FOUND)

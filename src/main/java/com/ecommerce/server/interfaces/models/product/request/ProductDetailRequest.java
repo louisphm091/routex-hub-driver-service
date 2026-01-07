@@ -1,7 +1,9 @@
-package com.ecommerce.server.interfaces.models.product;
+package com.ecommerce.server.interfaces.models.product.request;
 
 
 import com.ecommerce.server.interfaces.models.base.BaseRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,9 @@ public class ProductDetailRequest extends BaseRequest {
     @NoArgsConstructor
     @SuperBuilder
     public static class ProductDetailRequestData {
+
+        @NotNull
+        @NotBlank
         private String categoryId;
         private String typeId;
         private boolean slug;

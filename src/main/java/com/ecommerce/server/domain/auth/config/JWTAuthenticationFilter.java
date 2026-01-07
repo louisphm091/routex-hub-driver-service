@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * @author Bao Pham
  * @created 08/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 

@@ -3,10 +3,12 @@ package com.ecommerce.server.application.services;
 import com.ecommerce.server.domain.product.Product;
 import com.ecommerce.server.infrastructure.persistence.adapter.ProductGateway;
 import com.ecommerce.server.infrastructure.persistence.mapper.ProductMapper;
-import com.ecommerce.server.interfaces.models.product.ProductDetailRequest;
-import com.ecommerce.server.interfaces.models.product.UploadProductResponse;
-import com.ecommerce.server.interfaces.models.request.product.ProductDetailResponse;
-import com.ecommerce.server.interfaces.models.request.product.UploadProductRequest;
+import com.ecommerce.server.interfaces.models.product.request.ProductDetailRequest;
+import com.ecommerce.server.interfaces.models.product.request.UpdateProductRequest;
+import com.ecommerce.server.interfaces.models.product.response.UpdateProductResponse;
+import com.ecommerce.server.interfaces.models.product.response.UploadProductResponse;
+import com.ecommerce.server.interfaces.models.product.response.ProductDetailResponse;
+import com.ecommerce.server.interfaces.models.product.request.UploadProductRequest;
 import com.ecommerce.server.interfaces.records.ProductFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import java.util.UUID;
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @Service
@@ -27,11 +29,6 @@ public class ProductServiceImpl implements ProductService{
     private ProductGateway productGateway;
     private CategoryService categoryService;
     private ProductMapper productMapper;
-
-    @Override
-    public Product addProduct(ProductDetailResponse product) {
-        return null;
-    }
 
     @Override
     public ProductDetailResponse getAllProducts(ProductDetailRequest request) {
@@ -44,12 +41,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductDetailResponse getProductBySlug(String slug) {
-        return null;
-    }
-
-    @Override
-    public ProductDetailResponse getProductById(UUID id) {
+    public ProductDetailResponse getProductById(ProductDetailRequest id) {
         return null;
     }
 
@@ -59,13 +51,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product updateProduct(ProductDetailResponse productDto, UUID id) {
-        return null;
-    }
-
-    @Override
-    public Product fetchProductById(UUID id) throws Exception {
-//        return productRepository.findById(id).orElseThrow(BadRequestException::new);
+    public UpdateProductResponse updateProduct(UpdateProductRequest request) {
         return null;
     }
 

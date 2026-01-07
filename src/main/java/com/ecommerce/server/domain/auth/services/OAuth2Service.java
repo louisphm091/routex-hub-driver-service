@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author Bao Pham
  * @created 08/04/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 

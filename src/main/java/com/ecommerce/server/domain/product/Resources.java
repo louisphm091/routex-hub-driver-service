@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @Entity

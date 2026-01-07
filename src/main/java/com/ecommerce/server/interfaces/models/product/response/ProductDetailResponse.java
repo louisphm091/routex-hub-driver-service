@@ -1,4 +1,4 @@
-package com.ecommerce.server.interfaces.models.request.product;
+package com.ecommerce.server.interfaces.models.product.response;
 
 import com.ecommerce.server.interfaces.models.request.base.BaseResponse;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project e-commerce application
+ * @project ecom-hub-product-service
  **/
 
 @Getter

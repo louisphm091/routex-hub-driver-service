@@ -1,7 +1,8 @@
-package com.ecommerce.server.interfaces.models.request.product;
+package com.ecommerce.server.interfaces.models.product.request;
 
 
 import com.ecommerce.server.interfaces.models.base.BaseRequest;
+import com.ecommerce.server.interfaces.models.product.response.ProductDetailResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
