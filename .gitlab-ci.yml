@@ -65,11 +65,13 @@ build_push_image:
   image: docker:27
   services:
     - name: docker:27-dind
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+  variables:
+    DOCKER_TLS_CERTDIR: ""
   needs:
     - job: auto_tag
       artifacts: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
@@ -77,13 +79,10 @@ build_push_image:
     - TAG="$(cat tag.txt)"
     - echo "CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE"
     - echo "Build image: $CI_REGISTRY_IMAGE:$TAG"
-
     - docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
     - docker push "$CI_REGISTRY_IMAGE:$TAG"
-
     - docker tag "$CI_REGISTRY_IMAGE:$TAG" "$CI_REGISTRY_IMAGE:latest"
     - docker push "$CI_REGISTRY_IMAGE:latest"
-
   artifacts:
     expire_in: 7 days
     paths:
