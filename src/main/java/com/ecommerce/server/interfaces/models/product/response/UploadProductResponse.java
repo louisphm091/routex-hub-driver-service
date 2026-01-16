@@ -12,24 +12,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @SuperBuilder
-public class UploadProductResponse extends BaseResponse {
-
-    private UploadProductResponseResult result;
-    private UploadProductResponseData data;
-
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @SuperBuilder
-    public static class UploadProductResponseResult {
-        private String responseCode;
-        private String description;
-    }
+public class UploadProductResponse extends BaseResponse<UploadProductResponse.UploadProductResponseData> {
 
     @Getter
     @Setter

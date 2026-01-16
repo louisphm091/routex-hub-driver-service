@@ -20,11 +20,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-public class ProductDetailResponse extends BaseResponse {
-
-    private List<ProductDetailResponseData> data;
+public class ProductDetailResponse extends BaseResponse<List<ProductDetailResponse.ProductDetailResponseData>> {
 
     @Getter
     @Setter

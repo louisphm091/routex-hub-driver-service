@@ -58,7 +58,7 @@ public class Product extends AbstractAuditingEntity {
     private Set<Category> categories;
 
     @OneToMany(
-            mappedBy = "product",
+            mappedBy = "productId",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY
@@ -67,7 +67,7 @@ public class Product extends AbstractAuditingEntity {
 
 
     @OneToMany(
-            mappedBy = "product",
+            mappedBy = "productId",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY

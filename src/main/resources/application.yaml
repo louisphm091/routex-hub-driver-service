@@ -1,13 +1,36 @@
 spring:
   application:
-    name: ecommerce-server
+    name: ecom-hub-product-service
 
+  threads:
+    virtual:
+      enabled: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+
+    consumer:
+      group-id: product-service
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.ecommerce.*"
   # server:
   #   servlet:
   #     context-path: /api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/LV-shop
+    url: jdbc:postgresql://localhost:5432/ECOM_HUB
     username: odoo
     password: odoo
     driver-class-name: org.postgresql.Driver
@@ -31,29 +54,64 @@ spring:
             enable: true
 
   security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 968667863356-0u0j5higt505clc04bd7kakhbqebp63r.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - profile
-              - email
-            redirect-uri: http://localhost:8080/login/oauth2/code/google
-            authorization-grant-type: authorization_code
-            client-name: Google
-        provider:
-          google:
-            authorization-uri: https://accounts.google.com/o/oauth2/auth
-            token-uri: https://oauth2.googleapis.com/token
-            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+    user:
+      name: admin
+      password: admin
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 968667863356-0u0j5higt505clc04bd7kakhbqebp63r.apps.googleusercontent.com
+#            client-secret: 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
+#            scope:
+#              - profile
+#              - email
+#            redirect-uri: http://localhost:8080/login/oauth2/code/google
+#            authorization-grant-type: authorization_code
+#            client-name: Google
+#        provider:
+#          google:
+#            authorization-uri: https://accounts.google.com/o/oauth2/auth
+#            token-uri: https://oauth2.googleapis.com/token
+#            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
-jwt:
-  auth:
-    app: authapp
-    secret_key: Y29vbC1qd3Qtc2VjcmV0LWtleS1wcm9kLWFzLWJhc2U2NA==
-    expires_in: 3600
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
+ibm:
+  mq:
+    host: localhost
+    port: 1414
+    user: app
+    password: 12345
+    channel: SMARTPAY.OMNI.APP
+    queueManager: smartpay
+    concurrency: 12-60
+
+jms:
+  thread:
+    receive:
+      timeout-seconds: 30
+    send:
+      timeout-seconds: 5
+  receive:
+    timeout: 30000
+  caching:
+    session-cache-size: 256
+  time-to-live-milliseconds: 20000
+  recovery-interval: 5000
+  max-message: 1
+
+server:
+  port: 8888
 
 stripe:
   secret: sk_test_51RBfto05DxE0eeiExfu6W7UjaBCWlRt7qg8C5CXQ00B1VtoUWLrVHxa94evlyqyGrnIMg22lN4u1hKGVrOvL4f8800hXgDxi32

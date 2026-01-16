@@ -1,18 +1,17 @@
 package com.ecommerce.server.application.services;
 
 import com.ecommerce.server.domain.auth.entities.User;
-import com.ecommerce.server.interfaces.models.OrderDetails;
-import com.ecommerce.server.interfaces.models.OrderItemDetail;
-import com.ecommerce.server.interfaces.models.OrderResponse;
 import com.ecommerce.server.domain.customer.Address;
 import com.ecommerce.server.domain.order.Order;
 import com.ecommerce.server.domain.order.OrderItem;
-import com.ecommerce.server.domain.payment.Payment;
-import com.ecommerce.server.domain.product.Product;
 import com.ecommerce.server.domain.order.OrderStatus;
+import com.ecommerce.server.domain.payment.Payment;
 import com.ecommerce.server.domain.payment.PaymentStatus;
 import com.ecommerce.server.infrastructure.persistence.repository.OrderRepository;
+import com.ecommerce.server.interfaces.models.OrderDetails;
+import com.ecommerce.server.interfaces.models.OrderItemDetail;
 import com.ecommerce.server.interfaces.models.OrderRequest;
+import com.ecommerce.server.interfaces.models.OrderResponse;
 import com.stripe.model.PaymentIntent;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
@@ -21,11 +20,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -65,41 +62,42 @@ public class OrderService {
                 .paymentMethod(orderRequest.getPaymentMethod())
                 .orderStatus(OrderStatus.PENDING)
                 .build();
-        List<OrderItem> orderItems = orderRequest.getOrderItemRequests().stream().map(orderItemRequest -> {
-            try {
-                Product product= productService.fetchProductById(orderItemRequest.getProductId());
-                OrderItem orderItem= OrderItem.builder()
-                        .product(product)
-                        .productVariantId(orderItemRequest.getProductVariantId())
-                        .quantity(orderItemRequest.getQuantity())
-                        .order(order)
-                        .build();
-                return orderItem;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
+//        List<OrderItem> orderItems = orderRequest.getOrderItemRequests().stream().map(orderItemRequest -> {
+//            try {
+//                Product product= productService.fetchProductById(orderItemRequest.getProductId());
+//                OrderItem orderItem= OrderItem.builder()
+//                        .product(product)
+//                        .productVariantId(orderItemRequest.getProductVariantId())
+//                        .quantity(orderItemRequest.getQuantity())
+//                        .order(order)
+//                        .build();
+//                return orderItem;
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }).toList();
+//
+//        order.setOrderItemList(orderItems);
+//        Payment payment=new Payment();
+//        payment.setPaymentStatus(PaymentStatus.PENDING);
+//        payment.setPaymentDate(new Date());
+//        payment.setOrder(order);
+//        payment.setAmount(order.getTotalAmount());
+//        payment.setPaymentMethod(order.getPaymentMethod());
+//        order.setPayment(payment);
+//        Order savedOrder = orderRepository.save(order);
 
-        order.setOrderItemList(orderItems);
-        Payment payment=new Payment();
-        payment.setPaymentStatus(PaymentStatus.PENDING);
-        payment.setPaymentDate(new Date());
-        payment.setOrder(order);
-        payment.setAmount(order.getTotalAmount());
-        payment.setPaymentMethod(order.getPaymentMethod());
-        order.setPayment(payment);
-        Order savedOrder = orderRepository.save(order);
 
-
-        OrderResponse orderResponse = OrderResponse.builder()
-                .paymentMethod(orderRequest.getPaymentMethod())
-                .orderId(savedOrder.getId())
-                .build();
-        if(Objects.equals(orderRequest.getPaymentMethod(), "CARD")){
-            orderResponse.setCredentials(paymentIntentService.createPaymentIntent(order));
-        }
-
-        return orderResponse;
+//        OrderResponse orderResponse = OrderResponse.builder()
+//                .paymentMethod(orderRequest.getPaymentMethod())
+//                .orderId(savedOrder.getId())
+//                .build();
+//        if(Objects.equals(orderRequest.getPaymentMethod(), "CARD")){
+//            orderResponse.setCredentials(paymentIntentService.createPaymentIntent(order));
+//        }
+//
+//        return orderResponse;
+        return null;
 
     }
 

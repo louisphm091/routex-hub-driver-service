@@ -1,13 +1,36 @@
 spring:
   application:
-    name: lv-shop-server
+    name: ecom-hub-product-service
 
+  threads:
+    virtual:
+      enabled: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+
+    consumer:
+      group-id: product-service
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.ecommerce.*"
   # server:
   #   servlet:
   #     context-path: /api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/LV-shop
+    url: jdbc:postgresql://localhost:5432/ECOM_HUB
     username: odoo
     password: odoo
     driver-class-name: org.postgresql.Driver
@@ -31,6 +54,9 @@ spring:
             enable: true
 
   security:
+    user:
+      name: admin
+      password: admin
     oauth2:
       client:
         registration:
@@ -49,6 +75,43 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
+ibm:
+  mq:
+    host: localhost
+    port: 1414
+    user: app
+    password: 12345
+    channel: SMARTPAY.OMNI.APP
+    queueManager: smartpay
+    concurrency: 12-60
+
+jms:
+  thread:
+    receive:
+      timeout-seconds: 30
+    send:
+      timeout-seconds: 5
+  receive:
+    timeout: 30000
+  caching:
+    session-cache-size: 256
+  time-to-live-milliseconds: 20000
+  recovery-interval: 5000
+  max-message: 1
+
+server:
+  port: 8888
 jwt:
   auth:
     app: authapp

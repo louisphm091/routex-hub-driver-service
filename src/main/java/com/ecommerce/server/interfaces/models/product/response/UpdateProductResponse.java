@@ -10,28 +10,11 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @SuperBuilder
-public class UpdateProductResponse extends BaseResponse {
-    private UpdateProductResponseResult result;
-    private UpdateProductResponseData data;
-
+public class UpdateProductResponse extends BaseResponse<UpdateProductResponse.UpdateProductResponseData> {
 
     @Getter
     @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @SuperBuilder
-    public static class UpdateProductResponseResult {
-        private String responseCode;
-        private String description;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
     @SuperBuilder
     public static class UpdateProductResponseData {
         private String productId;

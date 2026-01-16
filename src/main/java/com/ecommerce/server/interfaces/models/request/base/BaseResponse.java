@@ -1,5 +1,6 @@
 package com.ecommerce.server.interfaces.models.request.base;
 
+import com.ecommerce.server.interfaces.models.result.ApiResult;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -36,6 +37,8 @@ public abstract class BaseResponse<T> {
     @Size(max = 30, message = "Channel can't exceed 30 characters")
     @Pattern(regexp = CHANNEL_REGREX, message = "Channel must be ONL, OFF")
     private String channel;
+
+    private ApiResult result;
 
     private T data;
 }
