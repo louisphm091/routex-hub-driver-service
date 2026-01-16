@@ -10,7 +10,7 @@ import vn.com.routex.driver.service.interfaces.models.product.response.UploadPro
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project ecom-hub-product-service
+ * @project routex-hub-driver-service
  **/
 
 public interface ProductService {

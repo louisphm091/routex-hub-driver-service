@@ -21,7 +21,7 @@ test:
     # chạy khi push branch (feature/*, master...)
     - if: '$CI_COMMIT_BRANCH'
   script:
-    - mvn -q -DskipTests=false test
+    - mvn -q -Dspring.profiles.active=test test
 
 # =======================
 # 2) AUTO TAG - chỉ chạy khi merge vào master
