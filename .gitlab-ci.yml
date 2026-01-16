@@ -30,9 +30,7 @@ auto_tag:
     - git config user.name "ci-bot"
     - git fetch --tags
   script:
-    - |
-      set -e
-
+    - set -e
       LAST_TAG="$(git tag -l "v*" --sort=-v:refname | head -n 1)"
       if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
       echo "LAST_TAG=$LAST_TAG"
@@ -49,11 +47,11 @@ auto_tag:
       echo "$NEW_TAG" > tag.txt
 
       # tạo annotated tag
-      git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
+    - git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
 
       # push tag bằng token có quyền write_repository
-      git remote set-url origin "https://oauth2:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
-      git push origin "$NEW_TAG"
+    - git remote set-url origin "https://oauth2:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    - git push origin "$NEW_TAG"
   artifacts:
     expire_in: 7 days
     paths:
@@ -74,15 +72,15 @@ build_push_image:
     - if: '$CI_COMMIT_BRANCH == "master"'
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-  script:
-    - set -e
-    - TAG="$(cat tag.txt)"
-    - echo "CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE"
-    - echo "Build image: $CI_REGISTRY_IMAGE:$TAG"
-    - docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
-    - docker push "$CI_REGISTRY_IMAGE:$TAG"
-    - docker tag "$CI_REGISTRY_IMAGE:$TAG" "$CI_REGISTRY_IMAGE:latest"
-    - docker push "$CI_REGISTRY_IMAGE:latest"
+  script: |
+    set -e
+    TAG="$(cat tag.txt)"
+    echo "CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE"
+    echo "Build image: $CI_REGISTRY_IMAGE:$TAG"
+    docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
+    docker push "$CI_REGISTRY_IMAGE:$TAG"
+    docker tag "$CI_REGISTRY_IMAGE:$TAG" "$CI_REGISTRY_IMAGE:latest"
+    docker push "$CI_REGISTRY_IMAGE:latest"
   artifacts:
     expire_in: 7 days
     paths:
