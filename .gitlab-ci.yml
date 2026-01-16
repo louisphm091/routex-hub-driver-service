@@ -109,18 +109,28 @@ update_gitops_values_dev:
     - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "push"'
   before_script:
     - apk add --no-cache git yq
-    - git config user.email "ci-bot@orion-hub"
-    - git config user.name "ci-bot"
   script: |
     set -e
+
+    : "${GITOPS_REPO_URL:?GITOPS_REPO_URL is not set}"
+    : "${GITOPS_PUSH_TOKEN:?GITOPS_PUSH_TOKEN is not set}"
+    : "${GITOPS_VALUES_PATH_DEV:?GITOPS_VALUES_PATH_DEV is not set}"
 
     TAG="$(cat tag.txt)"
     export TAG
 
     echo "Update GitOps: repo=$CI_REGISTRY_IMAGE tag=$TAG"
+    echo "GitOps repo: $GITOPS_REPO_URL"
+    echo "Values path: $GITOPS_VALUES_PATH_DEV"
 
-    git clone "https://oauth2:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
+    git clone "https://routex:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
     cd gitops
+
+    # set identity INSIDE the repo (fix Author identity unknown)
+    git config user.email "ci-bot@orion-hub"
+    git config user.name "ci-bot"
+
+    test -f "$GITOPS_VALUES_PATH_DEV"
 
     yq -i '.image.repository = strenv(CI_REGISTRY_IMAGE)' "$GITOPS_VALUES_PATH_DEV"
     yq -i '.image.tag = strenv(TAG)' "$GITOPS_VALUES_PATH_DEV"
