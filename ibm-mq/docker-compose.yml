@@ -1,0 +1,30 @@
+services:
+    ibm-mq:
+      image: icr.io/ibm-messaging/mq:latest
+      platform: linux/amd64
+      container_name: ibm-mq
+      environment:
+        LICENSE: accept
+        MQ_QMGR_NAME: ECOM_HUB
+        MQ_APP_PASSWORD: 12345
+        MQ_ENABLE_ADMIN: true
+        MQ_ADMIN_PASSWORD: 12345
+      ports:
+        - "1414:1414"
+        - "9443:9443"
+      volumes:
+        - qmldata:/mnt/mqm
+
+#
+#           docker run -d \
+#           --platform=linux/amd64 \
+#           --name ibm-mq \
+#           --env LICENSE=accept \
+#           --env MQ_QMGR_NAME=smartpay \
+#           --env MQ_ENABLE_ADMIN=true \
+#           --env MQ_APP_PASSWORD=12345 \
+#           --env MQ_ADMIN_PASSWORD=12345 \
+#           --volume qmldata:/mnt/mqm \
+#           -p 1414:1414 \
+#           -p 9443:9443 \
+#           icr.io/ibm-messaging/mq:latest
