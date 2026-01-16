@@ -99,22 +99,22 @@ update_gitops_values_dev:
     - apk add --no-cache git yq
     - git config user.email "ci-bot@orion-hub"
     - git config user.name "ci-bot"
-  script:
-    - set -e
-    - TAG="$(cat tag.txt)"
-    - export TAG
+  script: |
+    set -e
 
-    - echo "Update GitOps values: tag=$TAG"
-    - echo "Image repository (for Helm): $CI_REGISTRY_IMAGE"
+    TAG="$(cat tag.txt)"
+    export TAG
 
-    # clone gitops repo
-    - git clone "https://oauth2:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
-    - cd gitops
+    echo "Update GitOps values to tag=$TAG"
+    echo "Image repository: $CI_REGISTRY_IMAGE"
 
-    # update values: image.repository & image.tag
-    - yq -i '.image.repository = strenv(CI_REGISTRY_IMAGE)' "$GITOPS_VALUES_PATH_DEV"
-    - yq -i '.image.tag = strenv(TAG)' "$GITOPS_VALUES_PATH_DEV"
+    git clone "https://oauth2:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
+    cd gitops
 
-    - git add "$GITOPS_VALUES_PATH_DEV"
-    - git commit -m "chore(gitops): ${CI_PROJECT_NAME} -> ${TAG} (dev)" || echo "No changes to commit"
-    - git push origin master
+    # Update both repository + tag so Helm always points to the right image
+    yq -i '.image.repository = strenv(CI_REGISTRY_IMAGE)' "$GITOPS_VALUES_PATH_DEV"
+    yq -i '.image.tag = strenv(TAG)' "$GITOPS_VALUES_PATH_DEV"
+
+    git add "$GITOPS_VALUES_PATH_DEV"
+    git commit -m "chore(gitops): ${CI_PROJECT_NAME} -> ${TAG} (dev)" || echo "No changes to commit"
+    git push origin master
