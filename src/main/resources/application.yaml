@@ -7,7 +7,8 @@ spring:
       enabled: true
 
   kafka:
-    bootstrap-servers: localhost:9092
+    # K8s: set KAFKA_BOOTSTRAP_SERVERS = kafka:9092 (hoặc service của bạn)
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -18,34 +19,32 @@ spring:
         enable.idempotence: true
 
     consumer:
-      group-id: product-service
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:driver-service}
       auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "vn.com.*"
-  # server:
-  #   servlet:
-  #     context-path: /api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/routex_dev
-    username: routex
-    password: routex@2026
+    # K8s: set SPRING_DATASOURCE_URL = jdbc:postgresql://postgresql:5432/routex
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/routex_dev}
+    username: ${SPRING_DATASOURCE_USERNAME:routex}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: hold.missyoull@gmail.com
-    password: eenl pjmy tspf rivk
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:}
+    password: ${SPRING_MAIL_PASSWORD:}
     properties:
       mail:
         smtp:
@@ -55,25 +54,8 @@ spring:
 
   security:
     user:
-      name: admin
-      password: admin
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            client-id: 968667863356-0u0j5higt505clc04bd7kakhbqebp63r.apps.googleusercontent.com
-#            client-secret: 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
-#            scope:
-#              - profile
-#              - email
-#            redirect-uri: http://localhost:8080/login/oauth2/code/google
-#            authorization-grant-type: authorization_code
-#            client-name: Google
-#        provider:
-#          google:
-#            authorization-uri: https://accounts.google.com/o/oauth2/auth
-#            token-uri: https://oauth2.googleapis.com/token
-#            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+      name: ${SPRING_SECURITY_USER_NAME:admin}
+      password: ${SPRING_SECURITY_USER_PASSWORD:admin}
 
 management:
   endpoint:
@@ -88,30 +70,30 @@ management:
 
 ibm:
   mq:
-    host: localhost
-    port: 1414
-    user: app
-    password: 12345
-    channel: SMARTPAY.OMNI.APP
-    queueManager: smartpay
-    concurrency: 12-60
+    host: ${IBM_MQ_HOST:localhost}
+    port: ${IBM_MQ_PORT:1414}
+    user: ${IBM_MQ_USER:app}
+    password: ${IBM_MQ_PASSWORD:}
+    channel: ${IBM_MQ_CHANNEL:SMARTPAY.OMNI.APP}
+    queueManager: ${IBM_MQ_QUEUE_MANAGER:smartpay}
+    concurrency: ${IBM_MQ_CONCURRENCY:12-60}
 
 jms:
   thread:
     receive:
-      timeout-seconds: 30
+      timeout-seconds: ${JMS_THREAD_RECEIVE_TIMEOUT_SECONDS:30}
     send:
-      timeout-seconds: 5
+      timeout-seconds: ${JMS_THREAD_SEND_TIMEOUT_SECONDS:5}
   receive:
-    timeout: 30000
+    timeout: ${JMS_RECEIVE_TIMEOUT:30000}
   caching:
-    session-cache-size: 256
-  time-to-live-milliseconds: 20000
-  recovery-interval: 5000
-  max-message: 1
+    session-cache-size: ${JMS_CACHING_SESSION_CACHE_SIZE:256}
+  time-to-live-milliseconds: ${JMS_TIME_TO_LIVE_MILLISECONDS:20000}
+  recovery-interval: ${JMS_RECOVERY_INTERVAL:5000}
+  max-message: ${JMS_MAX_MESSAGE:1}
 
 server:
-  port: 8888
+  port: ${SERVER_PORT:8888}
 
 stripe:
-  secret: sk_test_51RBfto05DxE0eeiExfu6W7UjaBCWlRt7qg8C5CXQ00B1VtoUWLrVHxa94evlyqyGrnIMg22lN4u1hKGVrOvL4f8800hXgDxi32
+  secret: ${STRIPE_SECRET:}
