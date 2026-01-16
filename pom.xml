@@ -8,8 +8,8 @@
         <version>3.5.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.eceommerce</groupId>
-    <artifactId>ecom-hub-product-service</artifactId>
+    <groupId>vn.com</groupId>
+    <artifactId>routex.driver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>service</name>
     <description>Demo project for Spring Boot</description>

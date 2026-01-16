@@ -6,69 +6,89 @@ stages:
 variables:
   GIT_DEPTH: "0"
   DOCKER_BUILDKIT: "1"
-  DOCKER_TLS_CERTDIR: ""   # hay cần cho docker:dind
+  DOCKER_TLS_CERTDIR: ""
 
-# ---------- 2) AUTO TAG (master only) ----------
+# =======================
+# 1) AUTO TAG - chỉ chạy khi merge vào master
+# =======================
 auto_tag:
   stage: tag
   image: alpine:3.20
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "push"'
   before_script:
     - apk add --no-cache git bash
     - git config user.email "ci-bot@orion-hub"
     - git config user.name "ci-bot"
     - git fetch --tags
-  script:
-    - set -e
-      LAST_TAG="$(git tag -l "v*" --sort=-v:refname | head -n 1)"
-      if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
-      echo "LAST_TAG=$LAST_TAG"
+  script: |
+    set -e
 
-      VERSION="${LAST_TAG#v}"
-      MAJOR="$(echo "$VERSION" | cut -d. -f1)"
-      MINOR="$(echo "$VERSION" | cut -d. -f2)"
-      PATCH="$(echo "$VERSION" | cut -d. -f3)"
+    LAST_TAG="$(git tag -l "v*" --sort=-v:refname | head -n 1)"
+    if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
+    echo "LAST_TAG=$LAST_TAG"
 
-      PATCH="$((PATCH + 1))"
-      NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
-      echo "NEW_TAG=$NEW_TAG"
+    VERSION="${LAST_TAG#v}"
+    MAJOR="$(echo "$VERSION" | cut -d. -f1)"
+    MINOR="$(echo "$VERSION" | cut -d. -f2)"
+    PATCH="$(echo "$VERSION" | cut -d. -f3)"
 
-      echo "$NEW_TAG" > tag.txt
+    PATCH="$((PATCH + 1))"
+    NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
+    echo "NEW_TAG=$NEW_TAG"
+    echo "$NEW_TAG" > tag.txt
 
-      # tạo annotated tag
-    - git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
-
-      # push tag bằng token có quyền write_repository
-    - git remote set-url origin "https://oauth2:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
-    - git push origin "$NEW_TAG"
+    git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
+    git remote set-url origin "https://oauth2:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    git push origin "$NEW_TAG"
   artifacts:
     expire_in: 7 days
     paths:
       - tag.txt
 
-# ---------- 3) BUILD & PUSH IMAGE ----------
+# =======================
+# 2a) BUILD for feature branch & MR (verify only, no push)
+# =======================
+build_image_verify:
+  stage: build
+  image: docker:27
+  services:
+    - name: docker:27-dind
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"'
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script: |
+    set -e
+    TAG="verify-${CI_COMMIT_SHORT_SHA}"
+    echo "Build verify image: $CI_REGISTRY_IMAGE:$TAG"
+    docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
+
+# =======================
+# 2b) BUILD & PUSH for master release
+# =======================
 build_push_image:
   stage: build
   image: docker:27
   services:
     - name: docker:27-dind
-  variables:
-    DOCKER_TLS_CERTDIR: ""
   needs:
     - job: auto_tag
       artifacts: true
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "push"'
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script: |
     set -e
+
     TAG="$(cat tag.txt)"
-    echo "CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE"
-    echo "Build image: $CI_REGISTRY_IMAGE:$TAG"
+    echo "Build & push image: $CI_REGISTRY_IMAGE:$TAG"
+
     docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
     docker push "$CI_REGISTRY_IMAGE:$TAG"
+
     docker tag "$CI_REGISTRY_IMAGE:$TAG" "$CI_REGISTRY_IMAGE:latest"
     docker push "$CI_REGISTRY_IMAGE:latest"
   artifacts:
@@ -76,15 +96,17 @@ build_push_image:
     paths:
       - tag.txt
 
-# ---------- 4) UPDATE GITOPS (values-dev.yaml) ----------
+# =======================
+# 3) UPDATE GITOPS - chỉ master
+# =======================
 update_gitops_values_dev:
   stage: gitops
   image: alpine:3.20
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
   needs:
     - job: build_push_image
       artifacts: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "push"'
   before_script:
     - apk add --no-cache git yq
     - git config user.email "ci-bot@orion-hub"
@@ -95,16 +117,14 @@ update_gitops_values_dev:
     TAG="$(cat tag.txt)"
     export TAG
 
-    echo "Update GitOps values to tag=$TAG"
-    echo "Image repository: $CI_REGISTRY_IMAGE"
+    echo "Update GitOps: repo=$CI_REGISTRY_IMAGE tag=$TAG"
 
     git clone "https://oauth2:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
     cd gitops
 
-    # Update both repository + tag so Helm always points to the right image
     yq -i '.image.repository = strenv(CI_REGISTRY_IMAGE)' "$GITOPS_VALUES_PATH_DEV"
     yq -i '.image.tag = strenv(TAG)' "$GITOPS_VALUES_PATH_DEV"
 
     git add "$GITOPS_VALUES_PATH_DEV"
-    git commit -m "chore(gitops): ${CI_PROJECT_NAME} -> ${TAG} (dev)" || echo "No changes to commit"
+    git commit -m "chore(gitops): ${CI_PROJECT_NAME} -> ${TAG} (dev)" || echo "No changes"
     git push origin master

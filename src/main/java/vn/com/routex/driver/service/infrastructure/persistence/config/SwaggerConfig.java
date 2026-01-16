@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author Bao Pham
  * @created 31/03/2025
- * @project ecom-hub-product-service
+ * @project routex-hub-driver-service
  **/
 
 
@@ -17,7 +17,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Louis Vuitton API").description("Louis Vuitton ecom-hub-product-service")
+                .info(new Info().title("Louis Vuitton API").description("Louis Vuitton routex-hub-driver-service")
                         .version("1.0")
                         .contact(new Contact()
                                 .name("Louis Pham")));
