@@ -30,9 +30,9 @@ spring:
   #     context-path: /api
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/ECOM_HUB
-    username: odoo
-    password: odoo
+    url: jdbc:postgresql://localhost:5432/routex_dev
+    username: routex
+    password: routex@2026
     driver-class-name: org.postgresql.Driver
 
   jpa:
