@@ -1,5 +1,4 @@
 stages:
-  - test
   - tag
   - build
   - gitops
@@ -10,21 +9,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
 
 # =======================
-# 1) TEST - chạy cho feature branch + MR + master
-# =======================
-test:
-  stage: test
-  image: maven:3.9-eclipse-temurin-21
-  rules:
-    # chạy khi có MR
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    # chạy khi push branch (feature/*, master...)
-    - if: '$CI_COMMIT_BRANCH'
-  script:
-    - mvn -q -DskipTests package
-
-# =======================
-# 2) AUTO TAG - chỉ chạy khi merge vào master
+# 1) AUTO TAG - chỉ chạy khi merge vào master
 # =======================
 auto_tag:
   stage: tag
@@ -62,25 +47,26 @@ auto_tag:
       - tag.txt
 
 # =======================
-# 3a) BUILD for MR (không push, chỉ verify)
+# 2a) BUILD for feature branch & MR (verify only, no push)
 # =======================
-build_image_mr:
+build_image_verify:
   stage: build
   image: docker:27
   services:
     - name: docker:27-dind
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"'
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script: |
     set -e
-    TAG="mr-${CI_MERGE_REQUEST_IID}-${CI_COMMIT_SHORT_SHA}"
-    echo "Build image for MR: $CI_REGISTRY_IMAGE:$TAG"
+    TAG="verify-${CI_COMMIT_SHORT_SHA}"
+    echo "Build verify image: $CI_REGISTRY_IMAGE:$TAG"
     docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
 
 # =======================
-# 3b) BUILD & PUSH for master release
+# 2b) BUILD & PUSH for master release
 # =======================
 build_push_image:
   stage: build
@@ -96,6 +82,7 @@ build_push_image:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script: |
     set -e
+
     TAG="$(cat tag.txt)"
     echo "Build & push image: $CI_REGISTRY_IMAGE:$TAG"
 
@@ -110,7 +97,7 @@ build_push_image:
       - tag.txt
 
 # =======================
-# 4) UPDATE GITOPS - chỉ master
+# 3) UPDATE GITOPS - chỉ master
 # =======================
 update_gitops_values_dev:
   stage: gitops
@@ -130,7 +117,7 @@ update_gitops_values_dev:
     TAG="$(cat tag.txt)"
     export TAG
 
-    echo "Update GitOps: tag=$TAG repo=$CI_REGISTRY_IMAGE"
+    echo "Update GitOps: repo=$CI_REGISTRY_IMAGE tag=$TAG"
 
     git clone "https://oauth2:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
     cd gitops
