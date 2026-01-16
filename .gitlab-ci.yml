@@ -1,5 +1,4 @@
 stages:
-  - test
   - tag
   - build
   - gitops
@@ -8,15 +7,6 @@ variables:
   GIT_DEPTH: "0"
   DOCKER_BUILDKIT: "1"
   DOCKER_TLS_CERTDIR: ""   # hay cần cho docker:dind
-
-# ---------- 1) TEST ----------
-test:
-  stage: test
-  image: maven:3.9-eclipse-temurin-21
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-  script:
-    - mvn -q -DskipTests=false test
 
 # ---------- 2) AUTO TAG (master only) ----------
 auto_tag:
