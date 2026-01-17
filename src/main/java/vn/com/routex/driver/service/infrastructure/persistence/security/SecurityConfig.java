@@ -39,7 +39,7 @@ public class SecurityConfig {
                                 "/actuator/info",
                                 "/error").permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(apiFilter, BasicAuthenticationFilter.class)
+                .addFilterAfter(apiFilter, BasicAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
