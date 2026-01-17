@@ -2,10 +2,10 @@ package vn.com.routex.driver.service.infrastructure.persistence.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +19,7 @@ import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
@@ -26,18 +27,37 @@ public class SecurityConfig {
 
     private final ApiFilter apiFilter;
 
-    public SecurityConfig(ApiFilter apiFilter) { this.apiFilter = apiFilter; }
+    public SecurityConfig(ApiFilter apiFilter) {
+        this.apiFilter = apiFilter;
+    }
 
+    /**
+     * 1) Actuator chain: hoàn toàn permitAll, KHÔNG bật httpBasic, KHÔNG add ApiFilter
+     * => kubelet probes sẽ không bị 401 nữa.
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/actuator/**")
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .build();
+    }
+
+    /**
+     * 2) App chain: áp security cho các endpoint business
+     */
+    @Bean
+    @Order(2)
+    public SecurityFilterChain appChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfigurerCustomizer())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/actuator/**",
-                                "/error").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/error").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(apiFilter, BasicAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
@@ -51,7 +71,7 @@ public class SecurityConfig {
         return request -> {
             var corsConfig = new CorsConfiguration();
             corsConfig.applyPermitDefaultValues();
-            corsConfig.setAllowedMethods(List.of(GET.name(), POST.name(), DELETE.name(), OPTIONS.name()));
+            corsConfig.setAllowedMethods(List.of(GET.name(), POST.name(), PUT.name(), DELETE.name(), OPTIONS.name()));
             return corsConfig;
         };
     }
