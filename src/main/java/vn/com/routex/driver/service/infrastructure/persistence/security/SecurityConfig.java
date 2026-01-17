@@ -31,31 +31,16 @@ public class SecurityConfig {
         this.apiFilter = apiFilter;
     }
 
-    /**
-     * 1) Actuator chain: hoàn toàn permitAll, KHÔNG bật httpBasic, KHÔNG add ApiFilter
-     * => kubelet probes sẽ không bị 401 nữa.
-     */
     @Bean
-    @Order(1)
-    public SecurityFilterChain actuatorChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher("/actuator/**")
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .build();
-    }
-
-    /**
-     * 2) App chain: áp security cho các endpoint business
-     */
-    @Bean
-    @Order(2)
-    public SecurityFilterChain appChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfigurerCustomizer())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(
+                                "/actuator/**",
+                                "/error"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(apiFilter, BasicAuthenticationFilter.class)
