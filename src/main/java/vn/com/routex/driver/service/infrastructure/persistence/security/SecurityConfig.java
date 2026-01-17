@@ -34,16 +34,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfigurerCustomizer())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers(
+                                "/actuator/**",
+                                "/actuator/info",
+                                "/error").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(apiFilter, BasicAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/actuator/**");
     }
 
     private Customizer<CorsConfigurer<HttpSecurity>> corsConfigurerCustomizer() {
