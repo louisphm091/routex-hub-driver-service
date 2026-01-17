@@ -10,21 +10,18 @@ variables:
   DOCKER_TLS_CERTDIR: ""
 
 # -------------------------
-# 0) VERIFY for Merge Request
+# 0) VERIFY BUILD for Merge Request (no push, no tag)
 # -------------------------
 verify_build:
   stage: verify
   image: maven:3.9-eclipse-temurin-21
   rules:
-    # chạy cho MR
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    # chạy cho branch push (feature/*) để bạn thấy pipeline vẫn chạy nếu muốn
-    - if: '$CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master" && $CI_PIPELINE_SOURCE == "push"'
   script:
     - mvn -q -DskipTests package
 
 # -------------------------
-# 1) AUTO TAG (master push only)
+# 1) AUTO TAG (only master push)
 # -------------------------
 auto_tag:
   stage: tag
@@ -50,6 +47,7 @@ auto_tag:
     NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
     echo "$NEW_TAG" > tag.txt
 
+    # push tag (Project Access Token -> username is token name, e.g. routex)
     git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
     git remote set-url origin "https://routex:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
     git push origin "$NEW_TAG"
@@ -59,7 +57,7 @@ auto_tag:
       - tag.txt
 
 # -------------------------
-# 2) BUILD & PUSH IMAGE (master push only)
+# 2) BUILD & PUSH IMAGE (master only)
 # -------------------------
 build_push_image:
   stage: build
@@ -80,9 +78,13 @@ build_push_image:
 
     docker build -t "$CI_REGISTRY_IMAGE:$TAG" .
     docker push "$CI_REGISTRY_IMAGE:$TAG"
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - tag.txt
 
 # -------------------------
-# 3) UPDATE GITOPS VALUES (master push only)
+# 3) UPDATE GITOPS VALUES (master only)
 # -------------------------
 update_gitops_values_dev:
   stage: gitops
@@ -102,7 +104,6 @@ update_gitops_values_dev:
     TAG="$(cat tag.txt)"
     export TAG
 
-    # ✅ tự động theo repo name (khỏi hardcode)
     VALUES_PATH="deployment-config/service/${CI_PROJECT_NAME}/values-dev.yaml"
 
     git clone "https://routex:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
