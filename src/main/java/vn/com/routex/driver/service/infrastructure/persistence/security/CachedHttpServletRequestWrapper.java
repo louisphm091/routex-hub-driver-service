@@ -1,4 +1,4 @@
-package com.smart.pay.transaction.service.infrastructure.persistence.security;
+package vn.com.routex.driver.service.infrastructure.persistence.security;
 
 import jakarta.annotation.PreDestroy;
 import jakarta.servlet.ReadListener;
@@ -17,20 +17,23 @@ import java.nio.charset.StandardCharsets;
 public class CachedHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private final byte[] cachedRequest;
+
     public CachedHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
         this.cachedRequest = request.getInputStream().readAllBytes();
     }
 
     @Override
-    public ServletInputStream getInputStream() {return new CachedServletInputStream(this.cachedRequest);}
+    public ServletInputStream getInputStream() {
+        return new CachedServletInputStream(this.cachedRequest);
+    }
 
     @Override
     public BufferedReader getReader() {
         return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(this.cachedRequest), StandardCharsets.UTF_8));
     }
 
-    private class CachedServletInputStream extends ServletInputStream {
+    private static class CachedServletInputStream extends ServletInputStream {
         private final ByteArrayInputStream byteArrayInputStream;
 
         public CachedServletInputStream(byte[] cachedRequest) {

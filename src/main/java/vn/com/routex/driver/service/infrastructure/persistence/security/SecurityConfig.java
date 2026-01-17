@@ -1,4 +1,4 @@
-package com.smart.pay.transaction.service.infrastructure.persistence.security;
+package vn.com.routex.driver.service.infrastructure.persistence.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
