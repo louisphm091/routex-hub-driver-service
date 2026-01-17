@@ -95,5 +95,6 @@ jms:
 server:
   port: ${SERVER_PORT:8888}
 
-stripe:
-  secret: ${STRIPE_SECRET:}
+logging:
+  level:
+    org.springframework.security: DEBUG
