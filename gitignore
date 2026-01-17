@@ -1,43 +1,70 @@
-HELP.md
-target/
+############################
+# Maven / Java build output
+############################
+/target/
+**/target/
+**/target/**
+
+# Gradle
+/build/
+**/build/
+**/build/**
+
+############################
+# Maven Wrapper
+############################
 .mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-# Maven / Gradle
-target/
-build/
+############################
+# IDEs
+############################
 
 # IntelliJ IDEA
 .idea/
 *.iml
 *.iws
 *.ipr
+out/
 
-# Logs
-*.log
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache/
 
-# OS
-.DS_Store
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+
+############################
+# Logs & runtime files
+############################
+*.log
+logs/
+
+############################
+# OS files
+############################
+.DS_Store
+Thumbs.db
+
+############################
+# Spring Boot
+############################
+# Generated at runtime
+hs_err_pid*
+
+############################
+# Misc
+############################
+tmp/
+temp/
