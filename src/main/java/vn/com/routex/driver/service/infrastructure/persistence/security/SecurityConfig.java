@@ -35,7 +35,8 @@ public class SecurityConfig {
                 .cors(corsConfigurerCustomizer())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/actuator/**").permitAll()
+                                "/actuator/**",
+                                "/error").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(apiFilter, BasicAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
