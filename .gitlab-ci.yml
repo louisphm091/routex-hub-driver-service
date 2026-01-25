@@ -32,11 +32,14 @@ auto_tag:
     - apk add --no-cache git bash
     - git config user.email "routex@orion-hub"
     - git config user.name "routex-bot"
-    - git fetch --tags
+    # no-progress giúp log ổn định hơn
+    - git fetch --tags --force --prune --no-progress
   script: |
-    set -e
-    LAST_TAG="$(git tag -l "v*" --sort=-v:refname | head -n 1)"
-    if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
+    set -euo pipefail
+
+    # Tránh SIGPIPE 141: head đóng pipe sớm => thêm || true
+    LAST_TAG="$(git tag -l "v*" --sort=-v:refname | head -n 1 || true)"
+    if [ -z "${LAST_TAG}" ]; then LAST_TAG="v0.0.0"; fi
 
     VERSION="${LAST_TAG#v}"
     MAJOR="$(echo "$VERSION" | cut -d. -f1)"
@@ -46,11 +49,33 @@ auto_tag:
     PATCH="$((PATCH + 1))"
     NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
     echo "$NEW_TAG" > tag.txt
+    echo "NEW_TAG=$NEW_TAG"
 
-    # push tag (Project Access Token -> username is token name, e.g. routex)
+    # Nếu tag đã tồn tại (race condition), fail sớm rõ ràng
+    if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
+      echo "Tag $NEW_TAG already exists. Please re-run pipeline (or bump logic)."
+      exit 1
+    fi
+
     git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
+
+    # Project Access Token
     git remote set-url origin "https://routex:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
-    git push origin "$NEW_TAG"
+
+    # Retry push (phòng network hiccup)
+    for i in 1 2 3; do
+      if git push origin "$NEW_TAG"; then
+        echo "Pushed tag $NEW_TAG"
+        break
+      fi
+      echo "Push failed, retry $i..."
+      sleep $((i * 2))
+      git fetch --tags --force --prune --no-progress
+      if [ "$i" -eq 3 ]; then
+        echo "Failed to push tag after retries."
+        exit 1
+      fi
+    done
   artifacts:
     expire_in: 7 days
     paths:
@@ -72,7 +97,7 @@ build_push_image:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script: |
-    set -e
+    set -euo pipefail
     TAG="$(cat tag.txt)"
     echo "Build & push image: $CI_REGISTRY_IMAGE:$TAG"
 
@@ -97,7 +122,7 @@ update_gitops_values_dev:
   before_script:
     - apk add --no-cache git yq
   script: |
-    set -e
+    set -euo pipefail
     : "${GITOPS_REPO_URL:?GITOPS_REPO_URL is not set}"
     : "${GITOPS_PUSH_TOKEN:?GITOPS_PUSH_TOKEN is not set}"
 
@@ -119,5 +144,7 @@ update_gitops_values_dev:
 
     git add "$VALUES_PATH"
     git commit -m "chore(gitops): ${CI_PROJECT_NAME} -> ${TAG} (dev)" || echo "No changes"
+
+    # rebase trước push để tránh non-fast-forward
     git pull --rebase origin master
     git push origin master
