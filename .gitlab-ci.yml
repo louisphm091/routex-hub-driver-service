@@ -60,7 +60,7 @@ auto_tag:
     git tag -a "$NEW_TAG" -m "CI release $NEW_TAG"
 
     # Project Access Token
-    git remote set-url origin "https://routex:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    git remote set-url origin "https://oauth2:${GITLAB_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
 
     # Retry push (phòng network hiccup)
     for i in 1 2 3; do
@@ -131,7 +131,7 @@ update_gitops_values_dev:
 
     VALUES_PATH="deployment-config/service/${CI_PROJECT_NAME}/values-dev.yaml"
 
-    git clone "https://routex:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
+    git clone "https://oauth2:${GITOPS_PUSH_TOKEN}@${GITOPS_REPO_URL}" gitops
     cd gitops
 
     git config user.email "routex@orion-hub"
