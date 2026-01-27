@@ -15,21 +15,21 @@ import static vn.com.routex.driver.service.infrastructure.persistence.constant.E
 
 @Service
 @RequiredArgsConstructor
-public class DriverFacadeImpl implements DriverFacade{
+public class DriverFacadeImpl implements DriverFacade {
 
     private final DriverProfileService driverProfileService;
 
     @Override
     public ResponseEntity<UpdateProfileResponse> updateDriverProfile(UpdateProfileRequest request) {
-        UpdateProfileResponse response = driverProfileService.updateDriverProfile(request);
-        if(response == null) {
+        UpdateProfileResponse response = driverProfileService.processDriverProfile(request);
+        if (response == null) {
             throw new BusinessException(request.getRequestId(), request.getRequestDateTime(), request.getChannel(),
                     ExceptionUtils.buildResultResponse(TIMEOUT_ERROR, TIMEOUT_ERROR_MESSAGE));
         }
         response.setRequestId(request.getRequestId());
         response.setRequestDateTime(request.getRequestDateTime());
         response.setChannel(request.getChannel());
-        if(response.getData() == null) {
+        if (response.getData() == null) {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);

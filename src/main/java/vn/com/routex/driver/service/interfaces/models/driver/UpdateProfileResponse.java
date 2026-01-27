@@ -1,16 +1,12 @@
 package vn.com.routex.driver.service.interfaces.models.driver;
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.com.routex.driver.service.domain.driver.DriverStatus;
-import vn.com.routex.driver.service.interfaces.models.base.BaseRequest;
-import vn.com.routex.driver.service.interfaces.models.driver.request.UpdateProfileRequest;
 import vn.com.routex.driver.service.interfaces.models.result.ApiResult;
 
 import java.time.LocalDate;
