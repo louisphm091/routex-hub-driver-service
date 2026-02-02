@@ -28,6 +28,4 @@ public class DriverController {
     public ResponseEntity<UpdateProfileResponse> updateDriverProfile(@Valid @RequestBody UpdateProfileRequest request) {
         return driverFacade.updateDriverProfile(request);
     }
-
-    @PostMapping()
 }
