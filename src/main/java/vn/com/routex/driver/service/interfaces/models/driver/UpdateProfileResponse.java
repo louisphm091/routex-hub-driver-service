@@ -43,7 +43,7 @@ public class UpdateProfileResponse {
         private String email;
         private String avatarUrl;
         private DriverStatus status = DriverStatus.INACTIVE;
-        private UpdateProfileResponse.UpdateProfileResponseAdditional additional;
+        private UpdateProfileResponseAdditional additional;
     }
 
     @Getter

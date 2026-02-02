@@ -5,5 +5,5 @@ public class ApiConstant {
     public static final String API_VERSION = "/v1";
     public static final String DRIVER_PREFIX = "/driver-service";
     public static final String PROFILE = "/profile";
-
+    public static final String ME = "/me";
 }

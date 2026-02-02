@@ -61,6 +61,7 @@ public class UpdateProfileRequest extends BaseRequest {
         private UpdateProfileRequestAdditional additional;
         @Lob
         private String note;
+
     }
 
     @Getter

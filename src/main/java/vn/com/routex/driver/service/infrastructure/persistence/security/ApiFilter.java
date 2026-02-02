@@ -32,7 +32,6 @@ public class ApiFilter extends OncePerRequestFilter {
         try {
             CachedHttpServletRequestWrapper cachedHttpServletRequestWrapper = new CachedHttpServletRequestWrapper(request);
             String jsonStringBody = new String(cachedHttpServletRequestWrapper.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-            ObjectMapper objectMapper = new ObjectMapper();
             BaseRequest apiRequest = objectMapper.readValue(jsonStringBody, BaseRequest.class);
             request.setAttribute(RequestAttributes.REQUEST_ID, apiRequest.getRequestId());
             request.setAttribute(RequestAttributes.REQUEST_DATE_TIME, apiRequest.getRequestDateTime());
