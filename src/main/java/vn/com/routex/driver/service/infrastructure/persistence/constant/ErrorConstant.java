@@ -9,5 +9,7 @@ public class ErrorConstant {
     public static final String TIMEOUT_ERROR_MESSAGE = "Timeout";
     public static final String RECORD_NOT_FOUND = "1407";
     public static final String RECORD_NOT_FOUND_MESSAGE = "Record not found";
+    public static final String SUCCESS_CODE = "0000";
+    public static final String SUCCESS_MESSAGE = "Success";
 
 }

@@ -59,9 +59,6 @@ public class DriverProfile extends AbstractAuditingEntity {
     @Column(name = "PROFILE_URL")
     private String profielUrl;
 
-    @Column(name = "POINTS", nullable = false)
-    private Integer points = 0;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private DriverStatus status;
