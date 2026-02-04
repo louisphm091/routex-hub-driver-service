@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,8 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Entity
-@SuperBuilder
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @Table(name = "DRIVER_PROFILE")
 public class DriverProfile extends AbstractAuditingEntity {
 
@@ -29,17 +31,8 @@ public class DriverProfile extends AbstractAuditingEntity {
     @Column(name = "USER_ID")
     private String userId;
 
-    @Column(name = "DRIVER_CODE")
-    private String driverCode;
-
-    @Column(name = "VEHICLE_CODE")
-    private String vehicleCode;
-
-    @Column(name = "DEPOT_ID")
-    private String depotId;
-
-    @Column(name = "SHIFT_ID")
-    private String shiftId;
+    @Column(name = "CURRENT_ROUTE_ID")
+    private String currentRouteId;
 
     @Column(name = "EMPLOYEE_CODE")
     private String employeeCode;
@@ -50,15 +43,6 @@ public class DriverProfile extends AbstractAuditingEntity {
     @Column(name = "EMERGENCEY_CONTACT_PHONE")
     private String emergencyContactPhone;
 
-    @Column(name = "PHONE_NUMBER")
-    private String phoneNumber;
-
-    @Column(name = "EMAIL")
-    private String email;
-
-    @Column(name = "PROFILE_URL")
-    private String profielUrl;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private DriverStatus status;
@@ -66,18 +50,33 @@ public class DriverProfile extends AbstractAuditingEntity {
     @Column(name = "RATING")
     private Double rating;
 
-    @Column(name = "TOTAL_TRIPS", nullable = false)
+    @Column(name = "TOTAL_TRIPS")
     private Long totalTrips = 0L;
 
+    @Column(name = "LICENSE_CLASS")
     private String licenseClass;
+
+    @Column(name = "LICENSE_NUMBER")
     private String licenseNumber;
+
+    @Column(name = "LICENSE_ISSUE_DATE")
     private LocalDate licenseIssueDate;
+
+    @Column(name = "LICENSE_EXPIRY_DATE")
     private LocalDate licenseExpiryDate;
+
+    @Column(name = "POINTS_DELTA")
     private Integer pointsDelta;
+
+    @Column(name = "POINTS_REASON")
     private String pointsReason;
-    private String nationalId;
-    private LocalDate dob;
+
+    @Column(name = "KYC_VERIFIED")
     private Boolean kycVerified;
+
+    @Column(name = "TRAINING_COMPLTED")
     private Boolean trainingCompleted;
+
+    @Column(name = "NOTE")
     private String note;
 }

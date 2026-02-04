@@ -14,7 +14,7 @@ variables:
 # -------------------------
 verify_build:
   stage: verify
-  image: maven:3.9-eclipse-temurin-21
+  image: maven:3.9-eclipse-temurin-24
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   script:

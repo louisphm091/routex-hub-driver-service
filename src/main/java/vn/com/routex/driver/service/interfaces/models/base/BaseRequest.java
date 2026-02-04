@@ -23,7 +23,6 @@ import static vn.com.routex.driver.service.infrastructure.persistence.constant.A
 @NoArgsConstructor
 @SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
 public class BaseRequest {
 
     @NotBlank
