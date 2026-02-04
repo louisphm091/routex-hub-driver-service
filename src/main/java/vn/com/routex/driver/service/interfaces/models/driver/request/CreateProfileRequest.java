@@ -1,0 +1,22 @@
+package vn.com.routex.driver.service.interfaces.models.driver.request;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import vn.com.routex.driver.service.interfaces.models.base.BaseRequest;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
+public class CreateProfileRequest extends BaseRequest {
+
+    private String userId;
+    private String driverCode;
+    private String employeeCode;
+
+}
