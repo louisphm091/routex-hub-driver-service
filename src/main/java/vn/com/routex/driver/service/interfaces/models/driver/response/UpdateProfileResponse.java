@@ -1,4 +1,4 @@
-package vn.com.routex.driver.service.interfaces.models.driver;
+package vn.com.routex.driver.service.interfaces.models.driver.response;
 
 
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.com.routex.driver.service.domain.driver.DriverStatus;
-import vn.com.routex.driver.service.interfaces.models.result.ApiResult;
+import vn.com.routex.driver.service.interfaces.models.base.BaseResponse;
 
 import java.time.LocalDate;
 
@@ -16,13 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class UpdateProfileResponse {
-
-    private String requestId;
-    private String requestDateTime;
-    private String channel;
-
-    private ApiResult result;
+public class UpdateProfileResponse extends BaseResponse {
     private UpdateProfileResponseData data;
 
     @Getter
@@ -31,17 +25,14 @@ public class UpdateProfileResponse {
     @NoArgsConstructor
     @SuperBuilder
     public static class UpdateProfileResponseData {
-        private String driverName;
         private String driverCode;
         private String vehicleCode;
         private String employeeCode;
         private String depotId;
-        private String shiftId;
         private String emergencyContactName;
         private String emergencyContactPhone;
         private String phoneNumber;
         private String email;
-        private String avatarUrl;
         private DriverStatus status = DriverStatus.INACTIVE;
         private UpdateProfileResponseAdditional additional;
     }

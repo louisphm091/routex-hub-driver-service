@@ -1,6 +1,5 @@
 package vn.com.routex.driver.service.infrastructure.persistence.config;
 
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -20,14 +19,16 @@ import java.io.IOException;
 @Configuration
 public class ApplicationConfig {
 
-
     @Bean
-    public static ObjectMapper objectMapper() {
+    public static ObjectMapper getObjectMapper() {
         ObjectMapper objectMapper = JsonMapper.builder()
                 .accessorNaming(new DefaultAccessorNamingStrategy.Provider().withBuilderPrefix(""))
                 .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+                // XÓA dòng này để giữ thứ tự field theo class
+                // .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .build();
 
         SimpleModule stringNullToEmptyModule = new SimpleModule();
@@ -42,7 +43,6 @@ public class ApplicationConfig {
                 gen.writeObject(value);
             }
         });
-
 
         objectMapper.registerModule(stringNullToEmptyModule);
         objectMapper.registerModules(new JavaTimeModule());
