@@ -1,5 +1,6 @@
 package vn.com.routex.driver.service.domain.vehicle;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,15 +23,20 @@ public class Vehicle extends AbstractAuditingEntity {
     @Id
     private String id;
 
+    @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
     private VehicleStatus status;
 
+    @Column(name = "TYPE")
     @Enumerated(EnumType.STRING)
     private VehicleType type;
 
+    @Column(name = "VEHICLE_PLATE")
     private String vehiclePlate;
+
+    @Column(name = "SEAT_CAPACITY")
     private Integer seatCapacity;
+
+    @Column(name = "MANUFACTURER")
     private String manufacturer;
-    private String mode;
-    private String internalCode;
 }
