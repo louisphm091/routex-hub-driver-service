@@ -7,4 +7,5 @@ public class ApiConstant {
     public static final String CREATE_PROFILE = "/create-profile";
     public static final String UPDATE_PROFILE = "/update-profile";
     public static final String GET_DRIVER = "/get-driver";
+    public static final String DELETE_PROFILE = "/delete-profile";
 }

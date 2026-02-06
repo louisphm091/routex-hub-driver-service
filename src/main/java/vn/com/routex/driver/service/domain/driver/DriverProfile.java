@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.com.routex.driver.service.domain.auditing.AbstractAuditingEntity;
@@ -51,7 +50,7 @@ public class DriverProfile extends AbstractAuditingEntity {
     private Double rating;
 
     @Column(name = "TOTAL_TRIPS")
-    private Long totalTrips = 0L;
+    private int totalTrips;
 
     @Column(name = "LICENSE_CLASS")
     private String licenseClass;

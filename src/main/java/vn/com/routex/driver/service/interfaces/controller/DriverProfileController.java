@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import vn.com.routex.driver.service.application.facade.DriverFacade;
+import vn.com.routex.driver.service.interfaces.models.base.BaseResponse;
 import vn.com.routex.driver.service.interfaces.models.driver.request.CreateProfileRequest;
+import vn.com.routex.driver.service.interfaces.models.driver.request.DeleteProfileRequest;
 import vn.com.routex.driver.service.interfaces.models.driver.request.DriverProfileRequest;
 import vn.com.routex.driver.service.interfaces.models.driver.request.UpdateProfileRequest;
 import vn.com.routex.driver.service.interfaces.models.driver.response.CreateProfileResponse;
@@ -22,6 +24,7 @@ import vn.com.routex.driver.service.interfaces.models.driver.response.UpdateProf
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.API_PATH;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.API_VERSION;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.CREATE_PROFILE;
+import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.DELETE_PROFILE;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.DRIVER_PREFIX;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.GET_DRIVER;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApiConstant.UPDATE_PROFILE;
@@ -50,7 +53,10 @@ public class DriverProfileController {
         return driverFacade.updateDriverProfile(request);
     }
 
-
+    @PostMapping(DELETE_PROFILE)
+    public ResponseEntity<BaseResponse> deleteDriverProfile(@Valid @RequestBody DeleteProfileRequest request) {
+        return driverFacade.deleteDriverProfile(request);
+    }
 
     @PostMapping(GET_DRIVER)
     public ResponseEntity<DriverProfileResponse> getDriverProfile(@Valid @RequestBody DriverProfileRequest request) {
