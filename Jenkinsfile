@@ -1,2 +1,2 @@
-@Library('routex-lib') _
+@Library('routex-lib@master') _
 springBootPlugin()
