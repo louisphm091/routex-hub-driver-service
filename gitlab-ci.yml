@@ -1,0 +1,10 @@
+stages: [test]
+
+whoami:
+  stage: test
+  tags: [k8s]
+  image: alpine:3.20
+  script:
+    - echo "Runner OK"
+    - uname -a
+    - id
