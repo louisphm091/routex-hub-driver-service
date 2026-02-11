@@ -1,6 +1,7 @@
 package vn.com.routex.driver.service.interfaces.models.driver.request;
 
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,6 +14,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.com.routex.driver.service.interfaces.models.base.BaseRequest;
 
+import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApplicationConstant.DATE_MONTH_YEAR_REGEX;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApplicationConstant.ONLY_CHARACTER_REGEX;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApplicationConstant.ONLY_NUMBER_AND_CHARACTER_DIGITS;
 import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApplicationConstant.ONLY_NUMBER_REGEX;
@@ -25,6 +27,8 @@ import static vn.com.routex.driver.service.infrastructure.persistence.constant.A
 @SuperBuilder
 public class CreateProfileRequest extends BaseRequest {
 
+    @Valid
+    @NotNull
     private CreateProfileRequestData data;
 
     @Getter
@@ -79,23 +83,19 @@ public class CreateProfileRequest extends BaseRequest {
 
         @NotNull
         @NotBlank
+        @Pattern(regexp = DATE_MONTH_YEAR_REGEX, message = "must be in format yyyy-mm-dd")
         private String licenseIssueDate;
 
         @NotNull
         @NotBlank
+        @Pattern(regexp = DATE_MONTH_YEAR_REGEX, message = "must be in format yyyy-mm-dd")
         private String licenseExpiryDate;
 
         @Builder.Default
         private int pointsDelta = 0;
 
         private String pointsReason;
-
-        @NotNull
-        @NotBlank
         private boolean kycVerified;
-
-        @NotNull
-        @NotBlank
         private boolean trainingCompleted;
         private String note;
     }

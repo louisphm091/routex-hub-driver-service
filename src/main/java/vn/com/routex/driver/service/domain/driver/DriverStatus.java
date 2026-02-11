@@ -4,6 +4,7 @@ public enum DriverStatus {
     ACTIVE,
     INACTIVE,
     IN_TRIP,
-    SUSPENED,
-    IN_LEAVE
+    SUSPENDED,
+    IN_LEAVE,
+    DELETED;
 }

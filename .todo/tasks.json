@@ -55,5 +55,27 @@
       }
     },
     "isImported": false
+  },
+  {
+    "id": "TASK_6",
+    "priority": "HIGH",
+    "tags": [],
+    "title": "Add Sequence + Procedure for generating driverCode",
+    "description": "",
+    "status": "TODO",
+    "date": {
+      "date": {
+        "year": 2026,
+        "month": 2,
+        "day": 12
+      },
+      "time": {
+        "hour": 0,
+        "minute": 21,
+        "second": 39,
+        "nano": 874167000
+      }
+    },
+    "isImported": false
   }
 ]

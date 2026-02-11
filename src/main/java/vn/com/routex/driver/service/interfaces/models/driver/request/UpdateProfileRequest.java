@@ -1,16 +1,21 @@
 package vn.com.routex.driver.service.interfaces.models.driver.request;
 
 import jakarta.persistence.Lob;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import vn.com.routex.driver.service.domain.driver.DriverStatus;
 import vn.com.routex.driver.service.interfaces.models.base.BaseRequest;
 
 import java.time.LocalDate;
+
+import static vn.com.routex.driver.service.infrastructure.persistence.constant.ApplicationConstant.DATE_MONTH_YEAR_REGEX;
 
 @Getter
 @Setter
@@ -19,6 +24,8 @@ import java.time.LocalDate;
 @SuperBuilder
 public class UpdateProfileRequest extends BaseRequest {
 
+    @Valid
+    @NotNull
     private UpdateProfileRequestData data;
 
     @Getter
@@ -29,7 +36,7 @@ public class UpdateProfileRequest extends BaseRequest {
     public static class UpdateProfileRequestData {
         @NotBlank
         @NotNull
-        private String userId;
+        private String driverId;
 
         // Generate if empty or null;
         private String employeeCode;
@@ -40,18 +47,6 @@ public class UpdateProfileRequest extends BaseRequest {
         @NotNull
         private String emergencyContactPhone;
         private String status;
-        private UpdateProfileRequestAdditional additional;
-        @Lob
-        private String note;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @SuperBuilder
-    public static class UpdateProfileRequestAdditional {
-
         @NotBlank
         @NotNull
         private String licenseNumber;
@@ -60,23 +55,22 @@ public class UpdateProfileRequest extends BaseRequest {
         @NotNull
         private String licenseClass;
 
-        @NotBlank
         @NotNull
-        private LocalDate licenseIssueDate;
+        @NotBlank
+        @Pattern(regexp = DATE_MONTH_YEAR_REGEX, message = "must be in format yyyy-mm-dd")
+        private String licenseIssueDate;
 
         @NotBlank
         @NotNull
-        private LocalDate licenseExpiryDate;
+        @Pattern(regexp = DATE_MONTH_YEAR_REGEX, message = "must be in format yyyy-mm-dd")
+        private String licenseExpiryDate;
+
         private Integer pointsDelta;
         private String pointsReason;
-
-        @NotBlank
-        @NotNull
         private Boolean kycVerified;
-
-        @NotBlank
-        @NotNull
         private Boolean trainingCompleted;
 
+        @Lob
+        private String note;
     }
 }

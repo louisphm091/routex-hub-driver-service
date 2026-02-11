@@ -15,19 +15,19 @@ import vn.com.routex.driver.service.interfaces.models.base.BaseRequest;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class DeleteProfileRequest extends BaseRequest {
+public class UpdateDriverStatusRequest extends BaseRequest {
 
     @Valid
     @NotNull
-    private DeleteProfileRequestData data;
+    private UpdateDriverStatusRequestData data;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @SuperBuilder
-    public static class DeleteProfileRequestData {
+    public static class UpdateDriverStatusRequestData {
         private String driverId;
+        private String status;
     }
-
 }
