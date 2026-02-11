@@ -75,7 +75,7 @@ jms:
   max-message: ${JMS_MAX_MESSAGE:1}
 
 server:
-  port: ${SERVER_PORT:8888}
+  port: ${SERVER_PORT:8000}
 
 logging:
   level:

@@ -73,7 +73,7 @@ public class DriverProfile extends AbstractAuditingEntity {
     @Column(name = "KYC_VERIFIED")
     private Boolean kycVerified;
 
-    @Column(name = "TRAINING_COMPLTED")
+    @Column(name = "TRAINING_COMPLETED")
     private Boolean trainingCompleted;
 
     @Column(name = "NOTE")

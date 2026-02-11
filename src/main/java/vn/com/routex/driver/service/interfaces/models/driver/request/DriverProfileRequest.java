@@ -1,6 +1,8 @@
 package vn.com.routex.driver.service.interfaces.models.driver.request;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import vn.com.routex.driver.service.interfaces.models.base.BaseRequest;
 @SuperBuilder
 public class DriverProfileRequest extends BaseRequest {
 
+    @Valid
+    @NotNull
     private DriverProfileRequestData data;
 
     @Getter
