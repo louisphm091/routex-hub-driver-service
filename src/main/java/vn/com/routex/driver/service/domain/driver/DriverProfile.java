@@ -39,18 +39,22 @@ public class DriverProfile extends AbstractAuditingEntity {
     @Column(name = "EMERGENCY_CONTACT_NAME")
     private String emergencyContactName;
 
-    @Column(name = "EMERGENCEY_CONTACT_PHONE")
+    @Column(name = "EMERGENCY_CONTACT_PHONE")
     private String emergencyContactPhone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private DriverStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "OPERATION_STATUS", nullable = false)
+    private OperationStatus operationStatus;
+
     @Column(name = "RATING")
     private Double rating;
 
     @Column(name = "TOTAL_TRIPS")
-    private int totalTrips;
+    private Integer totalTrips;
 
     @Column(name = "LICENSE_CLASS")
     private String licenseClass;

@@ -30,6 +30,7 @@ public class CreateProfileResponse extends BaseResponse {
         private String emergencyContactName;
         private String emergencyContactPhone;
         private String status;
+        private String operationStatus;
         private double rating;
         private int totalTrips;
         private String licenseClass;

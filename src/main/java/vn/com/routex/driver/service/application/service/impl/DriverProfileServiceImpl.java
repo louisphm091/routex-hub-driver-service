@@ -1,11 +1,13 @@
 package vn.com.routex.driver.service.application.service.impl;
 
+import jdk.dynalink.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.com.routex.driver.service.application.service.DriverProfileService;
 import vn.com.routex.driver.service.domain.driver.DriverProfile;
 import vn.com.routex.driver.service.domain.driver.DriverProfileRepository;
 import vn.com.routex.driver.service.domain.driver.DriverStatus;
+import vn.com.routex.driver.service.domain.driver.OperationStatus;
 import vn.com.routex.driver.service.domain.user.User;
 import vn.com.routex.driver.service.domain.user.UserRepository;
 import vn.com.routex.driver.service.infrastructure.persistence.exceptions.BusinessException;
@@ -110,6 +112,7 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                 .emergencyContactName(data.getEmergencyContactName())
                 .emergencyContactPhone(data.getEmergencyContactPhone())
                 .status(DriverStatus.valueOf(data.getStatus()))
+                .operationStatus(OperationStatus.AVAILABLE)
                 .rating(data.getRating())
                 .totalTrips(data.getTotalTrips())
                 .licenseClass(data.getLicenseClass())
@@ -141,6 +144,7 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                         .emergencyContactName(data.getEmergencyContactName())
                         .emergencyContactPhone(data.getEmergencyContactPhone())
                         .status(data.getStatus())
+                        .operationStatus(OperationStatus.AVAILABLE.name())
                         .rating(data.getRating())
                         .totalTrips(data.getTotalTrips())
                         .licenseClass(data.getLicenseClass())
@@ -177,6 +181,7 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                         .phone(user.getPhoneNumber())
                         .email(user.getEmail())
                         .status(profile.getStatus())
+                        .operationStatus(profile.getOperationStatus())
                         .points(profile.getPointsDelta())
                         .createdAt(profile.getCreatedAt())
                         .updatedAt(profile.getUpdatedAt())
@@ -202,11 +207,13 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                     .data(DeleteProfileResponse.DeleteProfileResponseData.builder()
                             .driverId(request.getData().getDriverId())
                             .status(DriverStatus.DELETED)
+                            .operationStatus(OperationStatus.NOT_AVAILABLE)
                             .build())
                     .build();
         }
 
         profile.setStatus(DriverStatus.DELETED);
+        profile.setOperationStatus(OperationStatus.NOT_AVAILABLE);
         profile.setUpdatedAt(LocalDateTime.now());
         driverProfileRepository.save(profile);
 
@@ -221,6 +228,7 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                 .data(DeleteProfileResponse.DeleteProfileResponseData.builder()
                         .driverId(request.getData().getDriverId())
                         .status(DriverStatus.DELETED)
+                        .operationStatus(OperationStatus.NOT_AVAILABLE)
                         .build())
                 .build();
     }
@@ -231,7 +239,15 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                 .orElseThrow(() -> new BusinessException(request.getRequestId(), request.getRequestDateTime(), request.getChannel(),
                         ExceptionUtils.buildResultResponse(RECORD_NOT_FOUND, RECORD_NOT_FOUND_MESSAGE)));
 
-        profile.setStatus(DriverStatus.valueOf(request.getData().getStatus()));
+        String status = request.getData().getStatus();
+        String operationStatus = request.getData().getOperationStatus();
+
+        if(status != null)
+            profile.setStatus(DriverStatus.valueOf(request.getData().getStatus()));
+
+        if(operationStatus != null)
+            profile.setOperationStatus(OperationStatus.valueOf(request.getData().getOperationStatus()));
+
         profile.setUpdatedAt(LocalDateTime.now());
 
         return UpdateDriverStatusResponse.builder()
@@ -244,13 +260,9 @@ public class DriverProfileServiceImpl implements DriverProfileService {
                         .build())
                 .data(UpdateDriverStatusResponse.UpdateDriverStatusResponseData.builder()
                         .driverId(request.getData().getDriverId())
-                        .status(DriverStatus.valueOf(request.getData().getStatus()))
+                        .status(status != null ? DriverStatus.valueOf(request.getData().getStatus()) : profile.getStatus())
+                        .operationStatus(operationStatus != null ? OperationStatus.valueOf(request.getData().getOperationStatus()) : profile.getOperationStatus())
                         .build())
                 .build();
     }
-
-    private <T> void setIfNotNull(T value, Consumer<T> setter) {
-        if (value != null) setter.accept(value);
-    }
-
 }

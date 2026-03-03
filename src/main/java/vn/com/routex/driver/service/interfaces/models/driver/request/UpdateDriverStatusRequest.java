@@ -29,5 +29,6 @@ public class UpdateDriverStatusRequest extends BaseRequest {
     public static class UpdateDriverStatusRequestData {
         private String driverId;
         private String status;
+        private String operationStatus;
     }
 }

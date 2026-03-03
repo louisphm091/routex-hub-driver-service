@@ -27,8 +27,6 @@ public class ApplicationConfig {
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
-                // XÓA dòng này để giữ thứ tự field theo class
-                // .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .build();
 
         SimpleModule stringNullToEmptyModule = new SimpleModule();

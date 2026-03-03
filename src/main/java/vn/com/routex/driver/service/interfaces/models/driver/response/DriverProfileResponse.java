@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.com.routex.driver.service.domain.driver.DriverStatus;
+import vn.com.routex.driver.service.domain.driver.OperationStatus;
 import vn.com.routex.driver.service.interfaces.models.base.BaseResponse;
 import vn.com.routex.driver.service.interfaces.models.result.ApiResult;
 
@@ -38,6 +39,7 @@ public class DriverProfileResponse extends BaseResponse {
         private String phone;
         private String email;
         private DriverStatus status;
+        private OperationStatus operationStatus;
         private String availability;
         private String vehicleCode;
         private String routeId;
